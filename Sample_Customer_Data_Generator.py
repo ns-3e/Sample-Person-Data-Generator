@@ -7,41 +7,41 @@ DATA_SET_SIZE = 100
 df = {'first_name', 'last_name', 'full_name', 'prefix', 'suffix','email', 'phone_number', 'street_address', 'city', 'state', 'zip_code'}
 
 # parser to get city state and zip code from address
-def parse_address(address):
-    address_list = address.split(', ')
-    address_ln1 = address_list[0].split('\n')[0]
-    city = address_list[0].split('\n')[1]
-    state = address_list[1].split(' ')[0]
-    zip_code = address_list[1].split(' ')[1]
-    return [address_ln1, city, state, zip_code]
+# def parse_address(address):
+#     address_list = address.split(', ')
+#     print(address_list)
+#     address_ln1 = address_list[0].split('\n')[0]
+#     print(address_ln1)
+#     city = address_list[0].split('\n')[1]
+#     state = address_list[1].split(' ')[0]
+#     zip_code = address_list[1].split(' ')[1]
+#     return [address_ln1, city, state, zip_code]
 
 
-
-addy = myData.address()
-# parse_address(addy)
-# print("parser: ", parse_address(addy))
-# print("Full Address: ", addy)
-# print("City: ", parse_address(addy)[1])
-# print("State: ", parse_address(addy)[2])
-# print("Zip Code: ", parse_address(addy)[3])
 
 for person in range(DATA_SET_SIZE):
-    middel_name = myData.first_name()
-    middel_name = myData.first_name()
-    first_name = myData.first_name()
-    last_name = myData.last_name()
+    person = {'first_name' : myData.first_name(), 'middle_name': None, 'last_name' : myData.last_name(), 'prefix': None, 'suffix': None, 'email': myData.email(), 'phone_number': myData.phone_number(), 'street_address': myData.street_address(), 'city': myData.city(), 'state': myData.state(), 'zip_code': myData.zipcode()}
+    
     if myData.boolean():
-        prefix = myData.prefix()
-        suffix = myData.suffix()
-    print(myData.boolean())
-    print(myData.boolean())
-    full_name = first_name + " " + middel_name + " " + last_name
+        person['prefix'] = myData.prefix()
+    
+    if myData.boolean():
+        person['suffix'] = myData.suffix()
+    
+    if myData.boolean():
+        person['middel_name'] = myData.first_name()
+    
+    print(person)
 
 
 
 # --- Faker Functions ---
 # print(myData.name())
 # print(myData.address())
+# print(myData.street_address())
+# print(myData.city())
+# print(myData.state())
+# print(myData.zipcode())
 # print(myData.phone_number())
 # print(myData.email())
 # print(myData.company())
