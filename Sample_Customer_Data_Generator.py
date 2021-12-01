@@ -1,11 +1,10 @@
 import csv 
-import random
 from faker import Faker
 
 myData = Faker()
 
-DATA_SET_SIZE = 100
-df = {'First Name', 'Last Name', 'Email', 'Phone Number', 'Street Address', 'City', 'State', 'Zip Code'}
+DATA_SET_SIZE = 10000
+df = {'first_name', 'last_name', 'full_name', 'prefix', 'suffix','email', 'phone_number', 'street_address', 'city', 'state', 'zip_code'}
 
 # parser to get city state and zip code from address
 def parse_address(address):
@@ -16,15 +15,18 @@ def parse_address(address):
     zip_code = address_list[1].split(' ')[1]
     return [address_ln1, city, state, zip_code]
 
+
+
 addy = myData.address()
-parse_address(addy)
-print("parser: ", parse_address(addy))
-print("Full Address: ", addy)
-print("City: ", parse_address(addy)[1])
-print("State: ", parse_address(addy)[2])
-print("Zip Code: ", parse_address(addy)[3])
+# parse_address(addy)
+# print("parser: ", parse_address(addy))
+# print("Full Address: ", addy)
+# print("City: ", parse_address(addy)[1])
+# print("State: ", parse_address(addy)[2])
+# print("Zip Code: ", parse_address(addy)[3])
 
-
+for person in range(DATA_SET_SIZE):
+    print(myData.name())
 
 
 # --- Faker Functions ---
