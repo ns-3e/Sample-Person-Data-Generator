@@ -3,7 +3,7 @@ from faker import Faker
 
 myData = Faker()
 
-DATA_SET_SIZE = 10000
+DATA_SET_SIZE = 100
 df = {'first_name', 'last_name', 'full_name', 'prefix', 'suffix','email', 'phone_number', 'street_address', 'city', 'state', 'zip_code'}
 
 # parser to get city state and zip code from address
@@ -26,7 +26,17 @@ addy = myData.address()
 # print("Zip Code: ", parse_address(addy)[3])
 
 for person in range(DATA_SET_SIZE):
-    print(myData.name())
+    middel_name = myData.first_name()
+    middel_name = myData.first_name()
+    first_name = myData.first_name()
+    last_name = myData.last_name()
+    if myData.boolean():
+        prefix = myData.prefix()
+        suffix = myData.suffix()
+    print(myData.boolean())
+    print(myData.boolean())
+    full_name = first_name + " " + middel_name + " " + last_name
+
 
 
 # --- Faker Functions ---
