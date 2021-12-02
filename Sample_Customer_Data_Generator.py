@@ -1,41 +1,44 @@
-import csv 
 from faker import Faker
+import pandas as pd
+import os
+import datetime
 
 myData = Faker()
 
-DATA_SET_SIZE = 100
-df = {'first_name', 'last_name', 'full_name', 'prefix', 'suffix','email', 'phone_number', 'street_address', 'city', 'state', 'zip_code'}
+DATA_SET_SIZE = 50
 
-# parser to get city state and zip code from address
-# def parse_address(address):
-#     address_list = address.split(', ')
-#     print(address_list)
-#     address_ln1 = address_list[0].split('\n')[0]
-#     print(address_ln1)
-#     city = address_list[0].split('\n')[1]
-#     state = address_list[1].split(' ')[0]
-#     zip_code = address_list[1].split(' ')[1]
-#     return [address_ln1, city, state, zip_code]
-
-
+count = 0
+personRows = []
 
 for person in range(DATA_SET_SIZE):
-    person = {'first_name' : myData.first_name(), 'middle_name': None, 'last_name' : myData.last_name(), 'prefix': None, 'suffix': None, 'email': myData.email(), 'phone_number': myData.phone_number(), 'street_address': myData.street_address(), 'city': myData.city(), 'state': myData.state(), 'zip_code': myData.zipcode()}
+    pkey = 'F'+str(myData.ean13())
+    personRows.append({'pkey': pkey,'first_name' : myData.first_name(), 'middle_name': None, 'last_name' : myData.last_name(), 'prefix': None, 'suffix': None, 'email': myData.email(), 'phone_number': myData.phone_number(), 'street_address': myData.street_address(), 'city': myData.city(), 'state': myData.state(), 'zip_code': myData.zipcode()})
     
     if myData.boolean():
-        person['prefix'] = myData.prefix()
+        personRows[0]['prefix'] = myData.prefix()
     
     if myData.boolean():
-        person['suffix'] = myData.suffix()
+        personRows[0]['suffix'] = myData.suffix()
     
     if myData.boolean():
-        person['middel_name'] = myData.first_name()
-    
-    print(person)
+        personRows[0]['middel_name'] = myData.first_name()
+        personRows[0]['full_name'] = str(personRows[0]['first_name']) + ' ' + str(personRows[0]['middle_name']) + ' ' + str(personRows[0]['last_name'])
+    else:
+        personRows[0]['full_name'] = personRows[0]['first_name'] + ' ' + personRows[0]['last_name']
+    count += 1
+
+personDF = pd.DataFrame(personRows, columns=['pkey', 'first_name', 'middle_name', 'last_name', 'full_name', 'prefix', 'suffix', 'email', 'phone_number', 'street_address', 'city', 'state', 'zip_code'])
+print(personDF.head())
 
 
+path = './SampleDataFiles'
+if not os.path.exists(path):
+    os.makedirs(path)
 
-# --- Faker Functions ---
+file_path_name = "SampleDataFiles/Sample_Customer_Data_Generator(size-{}Rows)-{}.csv".format(DATA_SET_SIZE, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")).replace(':', '-')
+personDF.to_csv(str(file_path_name), index=False)
+
+# --- Faker Library Functions ---
 # print(myData.name())
 # print(myData.address())
 # print(myData.street_address())
@@ -64,6 +67,6 @@ for person in range(DATA_SET_SIZE):
 # print(myData.currency_code())
 # print(myData.currency_name())
 # print(myData.currency_symbol())
-# print(myData.ean13())
+#print(myData.ean13())
 # print(myData.ean8())
 
