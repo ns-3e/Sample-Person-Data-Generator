@@ -61,7 +61,7 @@ sub_event_rows = []
 for sub_event in range(10):
     sub_event_rows.append({'sub_event_pkey': 'SbeK'+str(myData.ean13()), 
                            'sub_event_souce_system': SOURCE_SYSTEM_NAME,
-                           'sub_event_parent_eventid': eventDF.iloc[sub_event]['pkey'],
+                           'sub_event_parent_eventid': eventDF.iloc[sub_event]['event_pkey'],
                            'sub_event_name': "SubEvent IRONMAN 70.3", 
                            'venue': myData.city(),})
 
@@ -75,9 +75,9 @@ for registration in range(DATA_SET_SIZE):
     rand_event_id = myData.random_int(0, 9)
     registration_rows.append({'registration_pkey': 'RegK'+str(myData.ean13()),
                               'registration_souce_system': SOURCE_SYSTEM_NAME,
-                              'registration_personid': personDF.iloc[registration]['pkey'],
-                              'registration_eventid': eventDF.iloc[rand_event_id]['pkey'], 
-                              'registration_sub_eventid': sub_eventDF.iloc[rand_event_id]['pkey'], 
+                              'registration_personid': personDF.iloc[registration]['person_pkey'],
+                              'registration_eventid': eventDF.iloc[rand_event_id]['event_pkey'], 
+                              'registration_sub_eventid': sub_eventDF.iloc[rand_event_id]['sub_event_pkey'], 
                               'registration_date': myData.date(pattern="%Y-%m-%d"), 
                               'registration_status': 'Registered',})
 
@@ -91,9 +91,9 @@ for result in range(DATA_SET_SIZE):
     rand_event_id = myData.random_int(0, 9)
     result_rows.append({'result_pkey': 'ResK'+str(myData.ean13()),
                         'result_souce_system': SOURCE_SYSTEM_NAME,
-                        'result_personid': personDF.iloc[result]['pkey'],
-                        'result_eventid': eventDF.iloc[rand_event_id]['pkey'], 
-                        'result_sub_eventid': sub_eventDF.iloc[rand_event_id]['pkey'], 
+                        'result_personid': personDF.iloc[result]['person_pkey'],
+                        'result_eventid': eventDF.iloc[rand_event_id]['event_pkey'], 
+                        'result_sub_eventid': sub_eventDF.iloc[rand_event_id]['sub_event_pkey'], 
                         'registration_number': myData.ean13(),})
 
 resultsDF = pd.DataFrame(result_rows, columns=['result_pkey', 'result_souce_system', 'result_personid', 'result_eventid', 'result_sub_eventid', 'registration_number'])
