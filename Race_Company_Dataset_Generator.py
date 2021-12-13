@@ -101,6 +101,21 @@ resultsDF = pd.DataFrame(result_rows, columns=['result_pkey', 'result_souce_syst
 
 
 
+# ---------- Hierarchy relationships ----------
+
+hierarchy_key = 'HieK'+str(myData.ean13())
+hierarchy_rows = []
+for row in range(DATA_SET_SIZE):
+    hierarchy_rows.append({'hierarchy_pkey': hierarchy_key, 
+                      'hierarchy_souce_system': SOURCE_SYSTEM_NAME,
+                      'event_pkey': resultsDF.iloc[row]['result_eventid'], 
+                      'sub_event_pkey': resultsDF.iloc[row]['result_sub_eventid'], 
+                      'registration_pkey': registrationDF.iloc[row]['registration_pkey'], 
+                      'result_pkey': resultsDF.iloc[row]['result_pkey'],})
+
+hierarchyDF = pd.DataFrame(hierarchy_rows, columns=['hierarchy_pkey', 'hierarchy_souce_system', 'event_pkey', 'sub_event_pkey', 'registration_pkey', 'result_pkey'])
+
+
 
 
 
@@ -153,6 +168,7 @@ eventDF.to_csv("{}/eventData.csv".format(path), index=False, quotechar='"', quot
 sub_eventDF.to_csv("{}/sub_eventData.csv".format(path), index=False, quotechar='"', quoting=1)
 registrationDF.to_csv("{}/registrationData.csv".format(path), index=False, quotechar='"', quoting=1)
 resultsDF.to_csv("{}/resultData.csv".format(path), index=False, quotechar='"', quoting=1)
+hierarchyDF.to_csv("{}/hierarchyData.csv".format(path), index=False, quotechar='"', quoting=1)
 
 
 
