@@ -50,19 +50,19 @@ print("Person DF: \n",personDF.head())
 # ---------- Event DF ----------
 event_rows = []
 
-for event in range(10):
-    event_rows.append({'event_pkey': 'EveK'+str(myData.ean13()), 'event_souce_system': SOURCE_SYSTEM_NAME, 'event_name': 'IRONMAN 70.3', 'event_description': myData.text()})
+for event in range(3):
+    event_rows.append({'event_pkey': 'EveK'+str(myData.ean13())+'e-'+str(event), 'event_souce_system': SOURCE_SYSTEM_NAME, 'event_name': myData.city()+'IRONMAN 70.3', 'event_description': myData.text()})
 
 eventDF = pd.DataFrame(event_rows, columns=['event_pkey', 'event_souce_system', 'event_name', 'event_description'])
 
 # ---------- Sub Event DF ----------
 sub_event_rows = []
 
-for sub_event in range(10):
-    sub_event_rows.append({'sub_event_pkey': 'SbeK'+str(myData.ean13()), 
+for sub_event in range(3):
+    sub_event_rows.append({'sub_event_pkey': 'SbeK'+str(myData.ean13())+'e-'+str(sub_event), 
                            'sub_event_souce_system': SOURCE_SYSTEM_NAME,
                            'sub_event_parent_eventid': eventDF.iloc[sub_event]['event_pkey'],
-                           'sub_event_name': "SubEvent IRONMAN 70.3", 
+                           'sub_event_name': "SubEvent-{} IRONMAN 70.3".format(sub_event), 
                            'venue': myData.city(),})
 
 sub_eventDF = pd.DataFrame(sub_event_rows, columns=['sub_event_pkey', 'sub_event_souce_system', 'parent_eventid', 'sub_event_name', 'venue'])
@@ -72,7 +72,7 @@ registration_rows = []
 
 for registration in range(DATA_SET_SIZE):
     #create a random int from 0 to 10
-    rand_event_id = myData.random_int(0, 9)
+    rand_event_id = myData.random_int(0, 2)
     registration_rows.append({'registration_pkey': 'RegK'+str(myData.ean13()),
                               'registration_souce_system': SOURCE_SYSTEM_NAME,
                               'registration_personid': personDF.iloc[registration]['person_pkey'],
@@ -88,32 +88,66 @@ result_rows = []
 
 for result in range(DATA_SET_SIZE):
     #create a random int from 0 to 10
-    rand_event_id = myData.random_int(0, 9)
+    rand_event_id = myData.random_int(0, 2)
     result_rows.append({'result_pkey': 'ResK'+str(myData.ean13()),
                         'result_souce_system': SOURCE_SYSTEM_NAME,
                         'result_personid': personDF.iloc[result]['person_pkey'],
                         'result_eventid': eventDF.iloc[rand_event_id]['event_pkey'], 
                         'result_sub_eventid': sub_eventDF.iloc[rand_event_id]['sub_event_pkey'], 
-                        'registration_number': myData.ean13(),})
+                        'registration_number': registrationDF.iloc[result]['registration_pkey'],})
 
 resultsDF = pd.DataFrame(result_rows, columns=['result_pkey', 'result_souce_system', 'result_personid', 'result_eventid', 'result_sub_eventid', 'registration_number'])
 
 
 
+# ---------- Hierarchy relationship File Builder ----------
 
-# ---------- Hierarchy relationships ----------
+# add all hierarchy entities to this list in the order of decreasing precedence
+Hierarchy_attribute_list = ["Event", "SubEvent", "Registration", "Result"]
 
-hierarchy_key = 'HieK'+str(myData.ean13())
 hierarchy_rows = []
-for row in range(DATA_SET_SIZE):
-    hierarchy_rows.append({'hierarchy_pkey': hierarchy_key, 
-                      'hierarchy_souce_system': SOURCE_SYSTEM_NAME,
-                      'event_pkey': resultsDF.iloc[row]['result_eventid'], 
-                      'sub_event_pkey': resultsDF.iloc[row]['result_sub_eventid'], 
-                      'registration_pkey': registrationDF.iloc[row]['registration_pkey'], 
-                      'result_pkey': resultsDF.iloc[row]['result_pkey'],})
+for record in range(DATA_SET_SIZE):
+    cur_result = resultsDF.iloc[record] 
+    #cur_registration = registrationDF.loc[(registrationDF.registration_pkey == cur_result['registration_number'])]
+    hierarchy_rows.append({
+        'instance_source_pkey': cur_result['result_eventid'],
+        'instance_destination_pkey': str(cur_result['result_eventid'])+" hierarchy instance",
+        'instance_name': str(cur_result['result_eventid'])+".hierarchy.instance",
+        'instance_rootKey': cur_result['result_eventid'],
+        'instance_rootSystem': 'ns.vm.hierarchy-import',
+        'Relationship_type': 'child_record',
+        'EventToSubEventParent_pkey': cur_result['result_eventid'],
+        'EventToSubEventParent_sourceSystem': SOURCE_SYSTEM_NAME,
+        'EventToSubEventChild_pkey': cur_result['result_sub_eventid'],
+        'EventToSubEventChild_sourceSystem': SOURCE_SYSTEM_NAME,
+        'EventToSubEvent_sourcePkey': "Hkey_EtSE_"+str(cur_result['result_eventid'])+"_"+str(record),
+        'SubEventToRegistrationParent_pkey': cur_result['result_sub_eventid'],
+        'SubEventToRegistrationParent_sourceSystem': SOURCE_SYSTEM_NAME,
+        'SubEventToRegistrationChild_pkey': cur_result['registration_number'],
+        'SubEventToRegistrationChild_sourceSystem': SOURCE_SYSTEM_NAME,
+        'SubEventToRegistration_sourcePkey': "Hkey_SEtR_"+str(cur_result['result_eventid'])+"_"+str(record),
+        'RegistrationToResultsParent_pkey': cur_result['registration_number'],
+        'RegistrationToResultsParent_sourceSystem': SOURCE_SYSTEM_NAME,
+        'RegistrationToResultsChild_pkey': cur_result['result_pkey'],
+        'RegistrationToResultsChild_sourceSystem': SOURCE_SYSTEM_NAME,
+        'RegistrationToResults_sourcePkey': "Hkey_RtR_"+str(cur_result['result_eventid'])+"_"+str(record),
 
-hierarchyDF = pd.DataFrame(hierarchy_rows, columns=['hierarchy_pkey', 'hierarchy_souce_system', 'event_pkey', 'sub_event_pkey', 'registration_pkey', 'result_pkey'])
+    })
+hierarchyDF = pd.DataFrame(hierarchy_rows, columns=['instance_source_pkey', 'instance_destination_pkey', 'instance_name', 'instance_rootKey', 'instance_rootSystem', 'Relationship_type', 'EventToSubEventParent_pkey', 'EventToSubEventParent_sourceSystem', 'EventToSubEventChild_pkey', 'EventToSubEventChild_sourceSystem', 'EventToSubEvent_sourcePkey', 'SubEventToRegistrationParent_pkey', 'SubEventToRegistrationParent_sourceSystem', 'SubEventToRegistrationChild_pkey', 'SubEventToRegistrationChild_sourceSystem', 'SubEventToRegistration_sourcePkey', 'RegistrationToResultsParent_pkey', 'RegistrationToResultsParent_sourceSystem', 'RegistrationToResultsChild_pkey', 'RegistrationToResultsChild_sourceSystem', 'RegistrationToResults_sourcePkey'])
+print(hierarchyDF.head())
+
+
+# hierarchy_key = 'HieK'+str(myData.ean13())
+# hierarchy_rows = []
+# for row in range(DATA_SET_SIZE):
+#     hierarchy_rows.append({'hierarchy_pkey': hierarchy_key, 
+#                       'hierarchy_souce_system': SOURCE_SYSTEM_NAME,
+#                       'event_pkey': resultsDF.iloc[row]['result_eventid'], 
+#                       'sub_event_pkey': resultsDF.iloc[row]['result_sub_eventid'], 
+#                       'registration_pkey': registrationDF.iloc[row]['registration_pkey'], 
+#                       'result_pkey': resultsDF.iloc[row]['result_pkey'],})
+
+# hierarchyDF = pd.DataFrame(hierarchy_rows, columns=['hierarchy_pkey', 'hierarchy_souce_system', 'event_pkey', 'sub_event_pkey', 'registration_pkey', 'result_pkey'])
 
 
 
