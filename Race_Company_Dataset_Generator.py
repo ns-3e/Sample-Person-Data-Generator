@@ -111,11 +111,10 @@ for record in range(DATA_SET_SIZE):
     #cur_registration = registrationDF.loc[(registrationDF.registration_pkey == cur_result['registration_number'])]
     hierarchy_rows.append({
         'instance_source_pkey': cur_result['result_eventid'],
-        'instance_destination_pkey': str(cur_result['result_eventid'])+" hierarchy instance",
+        'instance_description': str(cur_result['result_eventid'])+" hierarchy instance",
         'instance_name': str(cur_result['result_eventid'])+".hierarchy.instance",
         'instance_rootKey': cur_result['result_eventid'],
         'instance_rootSystem': 'ns.vm.hierarchy-import',
-        'Relationship_type': 'child_record',
         'EventToSubEventParent_pkey': cur_result['result_eventid'],
         'EventToSubEventParent_sourceSystem': SOURCE_SYSTEM_NAME,
         'EventToSubEventChild_pkey': cur_result['result_sub_eventid'],
