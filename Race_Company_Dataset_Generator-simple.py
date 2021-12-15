@@ -116,7 +116,7 @@ file_path_name_json = "SampleDataFiles/Ironman_Sample_Relational_Dataset_(Source
 # --------- Export to JSON ---------------
 
 # data = {'person': person_data, 'event': event_data, 'sub_event': sub_event_data, 'registration': registration_data, 'result': result_data}
-data = {'person': personDF, 'event': eventDF, 'sub_event': sub_eventDF, 'registration': registrationDF, 'result': resultsDF}
+# data = {'person': personDF, 'event': eventDF, 'sub_event': sub_eventDF, 'registration': registrationDF, 'result': resultsDF}
 
 path = './SampleDataFiles/DL_Ironman-{}'.format(datetime.datetime.now().strftime("%Y-%m-%d %H_%M"))
 if not os.path.exists(path):
@@ -127,9 +127,9 @@ if not os.path.exists(path):
 # ------------ Export to CSV ------------
 
 personDF.to_csv("{}/personData.csv".format(path),index=False, quotechar='"', quoting=1)
-eventDF.to_csv("{}/eventData.csv".format(path), index=False, quotechar='"', quoting=1)
-sub_eventDF.to_csv("{}/sub_eventData.csv".format(path), index=False, quotechar='"', quoting=1)
-registrationDF.to_csv("{}/registrationData.csv".format(path), index=False, quotechar='"', quoting=1)
+# eventDF.to_csv("{}/eventData.csv".format(path), index=False, quotechar='"', quoting=1)
+# sub_eventDF.to_csv("{}/sub_eventData.csv".format(path), index=False, quotechar='"', quoting=1)
+# registrationDF.to_csv("{}/registrationData.csv".format(path), index=False, quotechar='"', quoting=1)
 resultsDF.to_csv("{}/resultData.csv".format(path), index=False, quotechar='"', quoting=1)
 hierarchyDF.to_csv("{}/hierarchyData.csv".format(path), index=False, quotechar='"', quoting=1)
 
