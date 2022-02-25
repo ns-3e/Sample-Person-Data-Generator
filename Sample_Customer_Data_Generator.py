@@ -2,6 +2,7 @@ from faker import Faker
 import pandas as pd
 import os
 import datetime
+import random
 
 myData = Faker()
 
@@ -9,6 +10,11 @@ DATA_SET_SIZE = 50
 SOURCE_SYSTEM_NAME = "Python_Generation_script"
 
 personRows = []
+
+def rand_mariatal_status():
+    marital_statuses = ['Single', 'Married', 'Divorced', 'Widowed', 'Separated', 'S', 'M', 'D', 'W']
+    return random.choice(marital_statuses)
+
 
 for person in range(DATA_SET_SIZE):
     pkey = 'Python_GS'+str(myData.ean13())
@@ -24,10 +30,12 @@ for person in range(DATA_SET_SIZE):
             'suffix': None, 
             'email': myData.email(), 
             'phone_number': myData.phone_number(), 
-            'street_address': myData.street_address(), 
+            'address_line_1': myData.street_address(),
+            'address_line_2': None,
             'city': myData.city(), 
             'state': myData.state(), 
             'zip_code': myData.zipcode()
+            'marital_status': rand_mariatal_status(),
         }
     )
     
@@ -43,7 +51,7 @@ for person in range(DATA_SET_SIZE):
     else:
         personRows[person]['full_name'] = personRows[person]['first_name'] + ' ' + personRows[person]['last_name']
 
-personDF = pd.DataFrame(personRows, columns=['pkey', 'souce_system', 'first_name', 'middle_name', 'last_name', 'full_name', 'prefix', 'suffix', 'email', 'phone_number', 'street_address', 'city', 'state', 'zip_code'])
+personDF = pd.DataFrame(personRows, columns=['pkey', 'souce_system', 'first_name', 'middle_name', 'last_name', 'full_name', 'prefix', 'suffix', 'email', 'phone_number', 'address_line_1', 'city', 'state', 'zip_code'])
 print(personDF.head())
 
 
