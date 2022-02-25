@@ -9,7 +9,7 @@ import gender_identifier
 
 myData = Faker()
 
-DATA_SET_SIZE = 50
+DATA_SET_SIZE = 500
 SOURCE_SYSTEM_NAME = "Python_Generation_script"
 
 personRows = []
@@ -73,6 +73,8 @@ for person in range(DATA_SET_SIZE):
 personDF = pd.DataFrame(personRows, columns=['id', 'souce_system', 'first_name', 'middle_name', 'last_name', 'full_name', 'prefix', 'suffix', 'gender', 'email', 'phone_number', 'address_line_1', 'address_line_2', 'city', 'state', 'zip_code', 'marital_status', 'birth_date'])
 print(personDF.head())
 
+name_genderDF = pd.DataFrame(personRows, columns=['first_name', 'gender'])
+
 
 path = './SampleDataFiles'
 if not os.path.exists(path):
@@ -80,6 +82,7 @@ if not os.path.exists(path):
 
 file_path_name = 'SampleDataFiles/SAMPLE(SourceSystem-{})(size-{}Rows)-{}.csv'.format(SOURCE_SYSTEM_NAME, DATA_SET_SIZE, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')).replace(':', '-')
 personDF.to_csv(str(file_path_name), index=False, quotechar='"', quoting=1)
+#name_genderDF.to_csv(str('sampleDataFiles/name_gender.csv'), index=False, quotechar='"', quoting=1)
 
 # --- Faker Library Functions ---
 # print(myData.name())

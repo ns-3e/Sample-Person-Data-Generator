@@ -1,6 +1,7 @@
 import random
 from nltk.corpus import names
 import nltk
+import csv
 
 def gender_features(word):
     if len(word) < 3:
@@ -8,8 +9,14 @@ def gender_features(word):
     else:
         return{"last_letter":word[-1], "first_letter":word[0], "first_three": word[:3], "last_three": word[-3:]}
 
+with open('name_gender.csv', newline='') as f:
+    reader = csv.reader(f)
+    new_gender_name_list = list(reader)
+
+
 labeled_names = ([(name, "male") for name in names.words('male.txt')]+
-                [(name, "female") for name in names.words('female.txt')])
+                [(name, "female") for name in names.words('female.txt')]+
+                new_gender_name_list)
 
 random.shuffle(labeled_names)
 
