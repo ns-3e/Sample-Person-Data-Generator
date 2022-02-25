@@ -15,7 +15,7 @@ SOURCE_SYSTEM_NAME = "Python_Generation_script"
 personRows = []
 
 def rand_mariatal_status():
-    marital_statuses = ['Single', 'Married', 'Divorced', 'Widowed', 'Separated', 'S', 'M', 'D', 'W']
+    marital_statuses = ['Single', 'Married', 'Divorced', 'Widowed', 'Separated', 'S', 'M', 'D', 'W', 'Ukn', "unknown", "U", "u", None]
     return random.choice(marital_statuses)
 
 
@@ -23,7 +23,7 @@ for person in range(DATA_SET_SIZE):
     pkey = 'Python_GS'+str(myData.ean13())
     personRows.append(
         {
-        'pkey': pkey, 
+        'id': pkey, 
         'souce_system': SOURCE_SYSTEM_NAME, 
         'first_name' : myData.first_name(), 
         'middle_name': None, 
@@ -31,6 +31,7 @@ for person in range(DATA_SET_SIZE):
         'full_name': None,  
         'prefix': None, 
         'suffix': None, 
+        'gender': None,
         'email': myData.email(), 
         'phone_number': myData.phone_number(), 
         'address_line_1': myData.street_address(),
@@ -40,26 +41,36 @@ for person in range(DATA_SET_SIZE):
         'zip_code': myData.zipcode(),
         'marital_status': rand_mariatal_status(),
         'birth_date': myData.date_of_birth(),
-
         }
     )
 
     gender = gender_identifier.name_gender(personRows[person]['first_name'])
-    print(gender,personRows[person]['first_name'])
-    
+    # print(gender,personRows[person]['first_name'])
+    if gender == 'male':
+        personRows[person]['gender'] = random.choice(['M', 'm', 'male', 'Male', '1', 'u', 'U', 'ukn']) 
+    else:
+        personRows[person]['gender'] = random.choice(['F', 'f', 'female', 'Female', '2', 'u', 'U', 'ukn']) 
     if myData.boolean():
-        personRows[person]['prefix'] = myData.prefix()
+        if gender == 'male':
+            personRows[person]['prefix'] = random.choice(['Mr.','mr.', 'Dr.', 'dr.'])
+        else:
+            personRows[person]['prefix'] = random.choice(['Mrs.','mrs.', 'ms.', 'mrs.', 'miss', 'Dr.', 'dr.'])
     
     if myData.boolean():
         personRows[person]['suffix'] = myData.suffix()
     
     if myData.boolean():
-        personRows[person]['middle_name'] = myData.first_name()
-        personRows[person]['full_name'] = str(personRows[person]['first_name']) + ' ' + str(personRows[person]['middle_name']) + ' ' + str(personRows[person]['last_name'])
+        name_gender = False
+        name = None
+        while not name_gender:
+            name = myData.first_name()
+            name_gender = True if gender_identifier.name_gender(name) == gender else False    
+        personRows[person]['middle_name'] = name
+        personRows[person]['full_name'] = str(personRows[person]['first_name']) + ' ' + str(random.choice([name, name[0], str(name[0]+'.')])) + ' ' + str(personRows[person]['last_name'])
     else:
         personRows[person]['full_name'] = personRows[person]['first_name'] + ' ' + personRows[person]['last_name']
 
-personDF = pd.DataFrame(personRows, columns=['pkey', 'souce_system', 'first_name', 'middle_name', 'last_name', 'full_name', 'prefix', 'suffix', 'email', 'phone_number', 'address_line_1', 'city', 'state', 'zip_code'])
+personDF = pd.DataFrame(personRows, columns=['id', 'souce_system', 'first_name', 'middle_name', 'last_name', 'full_name', 'prefix', 'suffix', 'gender', 'email', 'phone_number', 'address_line_1', 'address_line_2', 'city', 'state', 'zip_code', 'marital_status', 'birth_date'])
 print(personDF.head())
 
 
@@ -67,8 +78,8 @@ path = './SampleDataFiles'
 if not os.path.exists(path):
     os.makedirs(path)
 
-file_path_name = "SampleDataFiles/Sample_Customer_Data_(SourceSystem-{})(size-{}Rows)-{}.csv".format(SOURCE_SYSTEM_NAME, DATA_SET_SIZE, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")).replace(':', '-')
-# personDF.to_csv(str(file_path_name), index=False, quotechar='"', quoting=1)
+file_path_name = 'SampleDataFiles/SAMPLE(SourceSystem-{})(size-{}Rows)-{}.csv'.format(SOURCE_SYSTEM_NAME, DATA_SET_SIZE, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')).replace(':', '-')
+personDF.to_csv(str(file_path_name), index=False, quotechar='"', quoting=1)
 
 # --- Faker Library Functions ---
 # print(myData.name())
