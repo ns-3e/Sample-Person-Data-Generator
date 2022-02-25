@@ -3,6 +3,8 @@ import pandas as pd
 import os
 import datetime
 import random
+from nltk.corpus import names
+import nltk
 
 myData = Faker()
 
@@ -20,24 +22,28 @@ for person in range(DATA_SET_SIZE):
     pkey = 'Python_GS'+str(myData.ean13())
     personRows.append(
         {
-            'pkey': pkey, 
-            'souce_system': SOURCE_SYSTEM_NAME, 
-            'first_name' : myData.first_name(), 
-            'middle_name': None, 
-            'last_name' : myData.last_name(), 
-            'full_name': None,  
-            'prefix': None, 
-            'suffix': None, 
-            'email': myData.email(), 
-            'phone_number': myData.phone_number(), 
-            'address_line_1': myData.street_address(),
-            'address_line_2': None,
-            'city': myData.city(), 
-            'state': myData.state(), 
-            'zip_code': myData.zipcode()
-            'marital_status': rand_mariatal_status(),
+        'pkey': pkey, 
+        'souce_system': SOURCE_SYSTEM_NAME, 
+        'first_name' : myData.first_name(), 
+        'middle_name': None, 
+        'last_name' : myData.last_name(), 
+        'full_name': None,  
+        'prefix': None, 
+        'suffix': None, 
+        'email': myData.email(), 
+        'phone_number': myData.phone_number(), 
+        'address_line_1': myData.street_address(),
+        'address_line_2': None,
+        'city': myData.city(), 
+        'state': myData.state(), 
+        'zip_code': myData.zipcode(),
+        'marital_status': rand_mariatal_status(),
+        'birth_date': myData.date_of_birth(),
+
         }
     )
+
+    # gender = 
     
     if myData.boolean():
         personRows[person]['prefix'] = myData.prefix()
