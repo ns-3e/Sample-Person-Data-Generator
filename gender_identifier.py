@@ -3,7 +3,6 @@ from nltk.corpus import names
 import nltk
 
 def gender_features(word):
-    middle = len(word)-6
     if len(word) < 3:
         return{"last_letter":word[-1], "first_letter":word[0]}
     else:
@@ -21,6 +20,7 @@ train_set = featuresets
 classifier = nltk.NaiveBayesClassifier.train(train_set)
 
 print(nltk.classify.accuracy(classifier, train_set))
+print(classifier.show_most_informative_features(10))
 
 def name_gender(name):
     return classifier.classify(gender_features(name))
