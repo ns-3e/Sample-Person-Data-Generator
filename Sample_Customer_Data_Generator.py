@@ -5,6 +5,7 @@ import datetime
 import random
 from nltk.corpus import names
 import nltk
+import gender_identifier
 
 myData = Faker()
 
@@ -43,7 +44,8 @@ for person in range(DATA_SET_SIZE):
         }
     )
 
-    # gender = 
+    gender = gender_identifier.name_gender(personRows[person]['first_name'])
+    print(gender,personRows[person]['first_name'])
     
     if myData.boolean():
         personRows[person]['prefix'] = myData.prefix()
@@ -66,7 +68,7 @@ if not os.path.exists(path):
     os.makedirs(path)
 
 file_path_name = "SampleDataFiles/Sample_Customer_Data_(SourceSystem-{})(size-{}Rows)-{}.csv".format(SOURCE_SYSTEM_NAME, DATA_SET_SIZE, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")).replace(':', '-')
-personDF.to_csv(str(file_path_name), index=False, quotechar='"', quoting=1)
+# personDF.to_csv(str(file_path_name), index=False, quotechar='"', quoting=1)
 
 # --- Faker Library Functions ---
 # print(myData.name())
