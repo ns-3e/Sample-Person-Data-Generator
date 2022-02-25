@@ -6,13 +6,30 @@ import datetime
 myData = Faker()
 
 DATA_SET_SIZE = 50
-SOURCE_SYSTEM_NAME = "Desktop_flatfile"
+SOURCE_SYSTEM_NAME = "Python_Generation_script"
 
 personRows = []
 
 for person in range(DATA_SET_SIZE):
-    pkey = 'DFF'+str(myData.ean13())
-    personRows.append({'pkey': pkey, 'souce_system': SOURCE_SYSTEM_NAME, 'first_name' : myData.first_name(), 'middle_name': None, 'last_name' : myData.last_name(), 'full_name': None,  'prefix': None, 'suffix': None, 'email': myData.email(), 'phone_number': myData.phone_number(), 'street_address': myData.street_address(), 'city': myData.city(), 'state': myData.state(), 'zip_code': myData.zipcode()})
+    pkey = 'Python_GS'+str(myData.ean13())
+    personRows.append(
+        {
+            'pkey': pkey, 
+            'souce_system': SOURCE_SYSTEM_NAME, 
+            'first_name' : myData.first_name(), 
+            'middle_name': None, 
+            'last_name' : myData.last_name(), 
+            'full_name': None,  
+            'prefix': None, 
+            'suffix': None, 
+            'email': myData.email(), 
+            'phone_number': myData.phone_number(), 
+            'street_address': myData.street_address(), 
+            'city': myData.city(), 
+            'state': myData.state(), 
+            'zip_code': myData.zipcode()
+        }
+    )
     
     if myData.boolean():
         personRows[person]['prefix'] = myData.prefix()

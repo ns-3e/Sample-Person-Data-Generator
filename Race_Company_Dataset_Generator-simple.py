@@ -6,8 +6,8 @@ import json
 
 myData = Faker()
 
-DATA_SET_SIZE = 20
-SOURCE_SYSTEM_NAME = "Desktop_Test_Flatfile"
+DATA_SET_SIZE = 5
+SOURCE_SYSTEM_NAME = "testing_ff"
 
 
 # ---------- Person DF ----------
@@ -55,7 +55,7 @@ for result in range(DATA_SET_SIZE):
     result_rows.append({'result_pkey': 'ResK'+str(myData.ean13()),
                         'result_souce_system': SOURCE_SYSTEM_NAME,
                         'result_personid': personDF.iloc[result]['person_pkey'],
-                        'result_eventid': str(myData.ean13())+'_e'+str(rand_event_id), 
+                        'result_eventid': 'TestEvent_'+str(rand_event_id), 
                         'result_sub_eventid': str(myData.ean13())+'_se'+str(rand_event_id), 
                         'registration_number': str(myData.ean13())+'_reg'+str(rand_event_id),})
 
